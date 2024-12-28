@@ -19,6 +19,7 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define LED_OFF HIGH
 
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
+//   route_usb_jtag_to_gpio(      1,       2,       3,       4,        5);
 void route_usb_jtag_to_gpio(int tck, int tms, int tdi, int tdo, int srst)
 {
   WRITE_PERI_REG(USB_SERIAL_JTAG_CONF0_REG, 
