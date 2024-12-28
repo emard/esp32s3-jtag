@@ -22,14 +22,15 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 //   route_usb_jtag_to_gpio(      1,       2,       3,       4,        5);
 void route_usb_jtag_to_gpio(int tck, int tms, int tdi, int tdo, int srst)
 {
-  WRITE_PERI_REG(USB_SERIAL_JTAG_CONF0_REG, 
-    READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG) | USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
+  WRITE_PERI_REG(USB_SERIAL_JTAG_CONF0_REG,
+    READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG)
+  | USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
   // esp_rom_gpio_connect_out_signal(GPIO, IOMATRIX, false, false);
-  esp_rom_gpio_connect_out_signal(tck,   85, false, false); // tck
-  esp_rom_gpio_connect_out_signal(tms,   86, false, false); // tms
-  esp_rom_gpio_connect_out_signal(tdi,   87, false, false); // tdi
-  esp_rom_gpio_connect_in_signal (tdo,  251, false);        // tdo
-  esp_rom_gpio_connect_out_signal(srst, 251, false, false); // srst, wire to reset or EN of target
+  esp_rom_gpio_connect_out_signal(tck,   85, false, false);
+  esp_rom_gpio_connect_out_signal(tms,   86, false, false);
+  esp_rom_gpio_connect_out_signal(tdi,   87, false, false);
+  esp_rom_gpio_connect_in_signal (tdo,  251, false);
+  esp_rom_gpio_connect_out_signal(srst, 251, false, false);
 }
 
 void setup()
