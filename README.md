@@ -110,13 +110,6 @@ It's in officual OpenOCD, driver and protocol description is here
 
 https://github.com/openocd-org/openocd/blob/master/src/jtag/drivers/esp_usb_jtag.c
 
-There is a code which should disable usb-jtag and
-put esp32s3 jtag pins high-z to be used as normal gpio.
-If external jtag is connected, this is one of possible
-ways to check that it is working:
-
-    openFPGALoader --board ulx3s --detect
-
 # TODO
 
 Detect when usb-serial is connected or disconnected
