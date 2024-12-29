@@ -25,30 +25,42 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define PIN_SRST 5
 
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
-//   route_usb_jtag_to_gpio(      1,       2,       3,       4,        5);
-void route_usb_jtag_to_gpio(int tck, int tms, int tdi, int tdo, int srst)
+void route_usb_jtag_to_gpio()
 {
-  pinMode(tck,OUTPUT);
-  pinMode(tms,OUTPUT);
-  pinMode(tdi,OUTPUT);
-  pinMode(tdo,INPUT);
-  pinMode(srst,OUTPUT);
+  pinMode(PIN_TCK, OUTPUT);
+  pinMode(PIN_TMS, OUTPUT);
+  pinMode(PIN_TDI, OUTPUT);
+  pinMode(PIN_TDO, INPUT);
+  pinMode(PIN_SRST, OUTPUT);
   WRITE_PERI_REG(USB_SERIAL_JTAG_CONF0_REG,
     READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG)
   | USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
   // esp_rom_gpio_connect_out_signal(GPIO, IOMATRIX, false, false);
-  esp_rom_gpio_connect_out_signal(tck,   85, false, false);
-  esp_rom_gpio_connect_out_signal(tms,   86, false, false);
-  esp_rom_gpio_connect_out_signal(tdi,   87, false, false);
-  esp_rom_gpio_connect_out_signal(srst, 251, false, false);
-  esp_rom_gpio_connect_in_signal (tdo,  251, false);
+  esp_rom_gpio_connect_out_signal(PIN_TCK,   85, false, false);
+  esp_rom_gpio_connect_out_signal(PIN_TMS,   86, false, false);
+  esp_rom_gpio_connect_out_signal(PIN_TDI,   87, false, false);
+  esp_rom_gpio_connect_out_signal(PIN_SRST, 251, false, false);
+  esp_rom_gpio_connect_in_signal (PIN_TDO,  251, false);
+}
+
+void unroute_usb_jtag_to_gpio()
+{
+  WRITE_PERI_REG(USB_SERIAL_JTAG_CONF0_REG,
+    READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG)
+  & ~USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
+  pinMode(PIN_TCK,  INPUT);
+  pinMode(PIN_TMS,  INPUT);
+  pinMode(PIN_TDI,  INPUT);
+  pinMode(PIN_TDO,  INPUT);
+  pinMode(PIN_SRST, INPUT);
 }
 
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LED_ON);
-  route_usb_jtag_to_gpio(PIN_TCK, PIN_TMS, PIN_TDI, PIN_TDO, PIN_SRST);
+  route_usb_jtag_to_gpio();
+  // unroute_usb_jtag_to_gpio();
 }
 
 void loop() {
