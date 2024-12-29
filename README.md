@@ -28,7 +28,9 @@ Modern linux already has openocd which supports esp32s3 usb jtag.
     apt install openocd
 
 On arduino install board support "esp32 by espressif".
-There is patched OpenOCD to supports this JTAG.
+
+For those who don't have openocd in linux distribution binary,
+in Arduino is some OpenOCD that supports this JTAG.
 It can be found here:
 
     find ~/.arduino15 -name openocd
