@@ -68,6 +68,11 @@ we can enable or disable jtag by typing "1" or "0" on keyboard:
     0 disable JTAG and turn LED OFF
     1 enable  JTAG and turn LED ON
 
+If external jtag is connected, here is one of many possible
+ways how to check that jtag is enabled or disabled:
+
+    openFPGALoader --board ulx3s --detect
+
 Openocd detects FPGA chip ID so JTAG hardware works.
 But there's some incompatibility issues with
 generated .svf file and openocd. We are close
