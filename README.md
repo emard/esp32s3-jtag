@@ -102,6 +102,8 @@ Command looks normal but openocd driver
 
     RUNTEST IDLE    2 TCK   1.00E-02 SEC; 
 
+# Protocol and source reference
+
 The patched OpenOCD is here
 
 https://github.com/espressif/openocd-esp32
