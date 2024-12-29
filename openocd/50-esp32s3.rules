@@ -1,0 +1,7 @@
+# file: /etc/udev/rules.d/50-esp32s3.rules
+# this is for usb-serial tty device
+SUBSYSTEM=="tty", ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
+  MODE="664", GROUP="dialout"
+# this is for usb-jtag libusb access
+ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
+  GROUP="dialout", MODE="666"

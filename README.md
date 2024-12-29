@@ -45,6 +45,16 @@ It can be found here:
     ~/.arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/bin/openocd
       -f ~/.arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/share/openocd/scripts/interface/esp_usb_jtag.cfg
 
+On linux udev rules are needed (users should be members of "dialout" group):
+
+    # file: /etc/udev/rules.d/50-esp32s3.rules
+    # this is for usbserial device
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
+    MODE="664", GROUP="dialout"
+    # this is for libusb usb-jtag access
+    ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
+    GROUP="dialout", MODE="666"
+
 It detects FPGA chip ID so JTAG hardware works.
 But there's some incompatibility issues with
 generated .svf file and openocd. We are close
