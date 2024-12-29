@@ -90,7 +90,8 @@ but our FPGA is not programmed yet.
     95%    Error: BUG: unknown JTAG command type encountered
 
 This is problematic command generating BUG.
-I don't know why, it looks normal:
+Command looks normal but openocd driver
+"esp_usb_jtag" doesn't support it.
 
     RUNTEST IDLE    2 TCK   1.00E-02 SEC; 
 
