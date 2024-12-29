@@ -66,7 +66,7 @@ we can enable or disable jtag by typing "1" or "0" on keyboard:
     0 disable JTAG and turn LED OFF
     1 enable  JTAG and turn LED ON
 
-It detects FPGA chip ID so JTAG hardware works.
+Openocd detects FPGA chip ID so JTAG hardware works.
 But there's some incompatibility issues with
 generated .svf file and openocd. We are close
 but our FPGA is not programmed yet.
