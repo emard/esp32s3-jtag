@@ -61,7 +61,7 @@ On linux udev rules are needed (users should be members of "dialout" group):
 
 By default JTAG is enabled.
 Using arduino serial monitor or any other serial terminal
-we can enable or disable jtag:
+we can enable or disable jtag by typing "1" or "0" on keyboard:
 
     0 disable JTAG and turn LED OFF
     1 enable  JTAG and turn LED ON
