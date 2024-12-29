@@ -75,4 +75,4 @@ I don't know why, it looks normal:
 
 The patched OpenOCD is here
 
-https://github.com/espressif/openocd-on-esp32
+https://github.com/espressif/openocd-esp32
