@@ -86,3 +86,10 @@ I don't know why, it looks normal:
 The patched OpenOCD is here
 
 https://github.com/espressif/openocd-esp32
+
+There is a code which should disable usb-jtag and
+put esp32s3 jtag pins high-z to be used as normal gpio.
+If external jtag is connected, this is one of possible
+ways to check that it is working:
+
+    openFPGALoader --board ulx3s --detect
