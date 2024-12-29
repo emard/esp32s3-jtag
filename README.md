@@ -1,14 +1,31 @@
 # ESP32S3 USB JTAG
 
 ESP32S3 and ESP32C3 have built-in hardware USB JTAG
-by default routed to JTAG of internal CPU but it seems
+by default routed to JTAG of internal CPU. It is
 possible to route this USB JTAG to physical GPIO pins.
+
+    XIAO ESP32S3 MINI
+    Mouser P/N: 713-113991114    7$
+
+                 XIAO  ESP32S3
+                    ┌─────┐
+                ┌───┘     └───┐
+            TCK │1    USB   5V│
+            TMS │2         GND│ GND
+            TDI │3        3.3V│ 3.3V
+            TDO │4           9│
+           SRST │5           8│
+                │6           7│
+                │43 TX   RX 44│
+                └─────────────┘
+                    top view  
+
 
 Here is short arduino code to initialize such JTAG.
 
-ESP patched OpenOCD to supports this JTAG.
-On arduino board support "esp32 by espressif" it can be
-found here:
+On arduino install board support "esp32 by espressif".
+There is patched OpenOCD to supports this JTAG.
+It can be found here:
 
     find ~/.arduino15 -name openocd
     .arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/bin/openocd
@@ -30,7 +47,8 @@ found here:
 
 It detects FPGA chip ID so JTAG hardware works.
 But there's some incompatibility issues with
-generated .svf file and openocd.
+generated .svf file and openocd. We are close
+but so FPGA is not programmed yet.
 
     cd openocd
     ./test.sh
