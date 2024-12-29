@@ -9,8 +9,8 @@ possible to route this USB JTAG to physical GPIO pins.
 
                  XIAO  ESP32S3
                     ┌─────┐
-                ┌───┘     └───┐
-            TCK │1    USB   5V│
+                ┌───┘ USB └───┐
+            TCK │1          5V│
             TMS │2         GND│ GND
             TDI │3        3.3V│ 3.3V
             TDO │4           9│
