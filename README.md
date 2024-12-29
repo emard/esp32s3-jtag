@@ -97,3 +97,8 @@ If external jtag is connected, this is one of possible
 ways to check that it is working:
 
     openFPGALoader --board ulx3s --detect
+
+# TODO
+
+Detect when usb-serial is connected or disconnected
+then enable or disable physical gpio jtag.
