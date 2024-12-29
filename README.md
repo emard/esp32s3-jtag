@@ -59,6 +59,12 @@ On linux udev rules are needed (users should be members of "dialout" group):
     ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
     GROUP="dialout", MODE="666"
 
+Using arduino serial monitor or any other serial terminal
+we can enable or disable jtag:
+
+    0 disable JTAG and turn LED OFF
+    1 enable  JTAG and turn LED ON
+
 It detects FPGA chip ID so JTAG hardware works.
 But there's some incompatibility issues with
 generated .svf file and openocd. We are close
