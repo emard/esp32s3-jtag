@@ -22,17 +22,17 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define PIN_TMS  2
 #define PIN_TDI  3
 #define PIN_TDO  4
-#define PIN_TRST 5
+#define PIN_SRST 5
 
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
 //   route_usb_jtag_to_gpio(      1,       2,       3,       4,        5);
 void route_usb_jtag_to_gpio(int tck, int tms, int tdi, int tdo, int srst)
 {
-  pinMode(PIN_TCK,OUTPUT);
-  pinMode(PIN_TMS,OUTPUT);
-  pinMode(PIN_TDI,OUTPUT);
-  pinMode(PIN_TDO,INPUT);
-  pinMode(PIN_TRST,OUTPUT);
+  pinMode(tck,OUTPUT);
+  pinMode(tms,OUTPUT);
+  pinMode(tdi,OUTPUT);
+  pinMode(tdo,INPUT);
+  pinMode(srst,OUTPUT);
   WRITE_PERI_REG(USB_SERIAL_JTAG_CONF0_REG,
     READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG)
   | USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
@@ -48,7 +48,7 @@ void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LED_ON);
-  route_usb_jtag_to_gpio(PIN_TCK, PIN_TMS, PIN_TDI, PIN_TDO, PIN_TRST);
+  route_usb_jtag_to_gpio(PIN_TCK, PIN_TMS, PIN_TDI, PIN_TDO, PIN_SRST);
 }
 
 void loop() {
