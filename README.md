@@ -59,6 +59,7 @@ On linux udev rules are needed (users should be members of "dialout" group):
     ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
     GROUP="dialout", MODE="666"
 
+By default JTAG is enabled.
 Using arduino serial monitor or any other serial terminal
 we can enable or disable jtag:
 
