@@ -110,6 +110,10 @@ It's in officual OpenOCD, driver and protocol description is here
 
 https://github.com/openocd-org/openocd/blob/master/src/jtag/drivers/esp_usb_jtag.c
 
+Here is the ESP32S2 or ESP32S3 usb jtag bridge project
+
+https://github.com/espressif/esp-usb-bridge
+
 # TODO
 
 Detect when usb-serial is connected or disconnected
