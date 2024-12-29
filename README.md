@@ -23,6 +23,10 @@ possible to route this USB JTAG to physical GPIO pins.
 
 Here is short arduino code to initialize such JTAG.
 
+Modern linux already has openocd which supports esp32s3 usb jtag.
+
+    apt install openocd
+
 On arduino install board support "esp32 by espressif".
 There is patched OpenOCD to supports this JTAG.
 It can be found here:
