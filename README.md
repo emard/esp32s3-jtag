@@ -25,3 +25,5 @@ found here:
     espusbjtag caps_descriptor 0x2000
     adapter speed 40000
 
+    ~/.arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/bin/openocd
+      -f ~/.arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/share/openocd/scripts/interface/esp_usb_jtag.cfg
