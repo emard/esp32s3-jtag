@@ -72,3 +72,7 @@ This is problematic command generating BUG.
 I don't know why, it looks normal:
 
     RUNTEST IDLE    2 TCK   1.00E-02 SEC; 
+
+The patched OpenOCD is here
+
+https://github.com/espressif/openocd-on-esp32
