@@ -48,7 +48,7 @@ It can be found here:
 It detects FPGA chip ID so JTAG hardware works.
 But there's some incompatibility issues with
 generated .svf file and openocd. We are close
-but so FPGA is not programmed yet.
+but our FPGA is not programmed yet.
 
     cd openocd
     ./test.sh
