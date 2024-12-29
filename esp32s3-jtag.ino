@@ -31,6 +31,7 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
 void route_usb_jtag_to_gpio()
 {
+  digitalWrite(LED_BUILTIN, LED_ON);
   pinMode(PIN_TCK, OUTPUT);
   pinMode(PIN_TMS, OUTPUT);
   pinMode(PIN_TDI, OUTPUT);
@@ -45,7 +46,6 @@ void route_usb_jtag_to_gpio()
   esp_rom_gpio_connect_out_signal(PIN_TDI,   87, false, false);
   esp_rom_gpio_connect_out_signal(PIN_SRST, 251, false, false);
   esp_rom_gpio_connect_in_signal (PIN_TDO,  251, false);
-  digitalWrite(LED_BUILTIN, LED_ON);
 }
 
 void unroute_usb_jtag_to_gpio()
