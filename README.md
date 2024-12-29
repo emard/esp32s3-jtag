@@ -27,3 +27,30 @@ found here:
 
     ~/.arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/bin/openocd
       -f ~/.arduino15/packages/esp32/tools/openocd-esp32/v0.12.0-esp32-20240821/share/openocd/scripts/interface/esp_usb_jtag.cfg
+
+It detects FPGA chip ID so JTAG hardware works.
+But there's some incompatibility issues with
+generated .svf file and openocd.
+
+    cd openocd
+    ./test.sh
+    Open On-Chip Debugger v0.12.0-esp32-20240821 (2024-08-21-14:42)
+    Licensed under GNU GPL v2
+    For bug reports, read
+    	http://openocd.org/doc/doxygen/bugs.html
+    Info : only one transport option; autoselecting 'jtag'
+    Info : esp_usb_jtag: VID set to 0x303a and PID to 0x1001
+    Info : esp_usb_jtag: capabilities descriptor set to 0x2000
+    adapter speed: 40000 kHz
+    Info : esp_usb_jtag: serial (64:E8:33:50:B2:30)
+    Info : esp_usb_jtag: Device found. Base speed 40000KHz, div range 1 to 255
+    Info : clock speed 40000 kHz
+    Info : JTAG tap: lfe5.tap tap/device found: 0x41111043 (mfg: 0x021 (Lattice Semi.), part: 0x1111, ver: 0x4)
+    Warn : gdb services need one or more targets defined
+    svf processing file: "bitstream.svf"
+    95%    Error: BUG: unknown JTAG command type encountered
+
+This is problematic command generating BUG.
+I don't know why, it looks normal:
+
+    RUNTEST IDLE    2 TCK   1.00E-02 SEC; 
