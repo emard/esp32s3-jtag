@@ -18,6 +18,10 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define LED_ON  LOW
 #define LED_OFF HIGH
 
+#define RXD  44
+#define TXD  43
+#define BAUD 115200
+
 #define PIN_TCK  1
 #define PIN_TMS  2
 #define PIN_TDI  3
@@ -41,6 +45,7 @@ void route_usb_jtag_to_gpio()
   esp_rom_gpio_connect_out_signal(PIN_TDI,   87, false, false);
   esp_rom_gpio_connect_out_signal(PIN_SRST, 251, false, false);
   esp_rom_gpio_connect_in_signal (PIN_TDO,  251, false);
+  digitalWrite(LED_BUILTIN, LED_ON);
 }
 
 void unroute_usb_jtag_to_gpio()
@@ -53,17 +58,33 @@ void unroute_usb_jtag_to_gpio()
   pinMode(PIN_TDI,  INPUT);
   pinMode(PIN_TDO,  INPUT);
   pinMode(PIN_SRST, INPUT);
+  digitalWrite(LED_BUILTIN, LED_OFF);
 }
 
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LED_ON);
+  digitalWrite(LED_BUILTIN, LED_OFF);
+  // usb-serial
+  Serial.begin(); // usb-serial
+  Serial1.begin(BAUD, SERIAL_8N1, RXD, TXD); // hardware serial
   route_usb_jtag_to_gpio();
   // unroute_usb_jtag_to_gpio();
 }
 
 void loop() {
-  digitalWrite(LED_BUILTIN, (((micros()>>16) & 15)==0)^LED_OFF );
-  // digitalWrite(LED_BUILTIN, digitalRead(2)^LED_OFF); // test input pin
+  uint8_t usb_rx;
+  // digitalWrite(LED_BUILTIN, (((micros()>>16) & 15)==0)^LED_OFF ); // blink
+  // digitalWrite(LED_BUILTIN, digitalRead(0)^LED_OFF); // test input pin
+  if(Serial.available())
+  {
+    usb_rx = Serial.read();
+    Serial1.write(usb_rx);
+    if(usb_rx == '0') // serial monitor send 0 to disable jtag
+      unroute_usb_jtag_to_gpio();
+    if(usb_rx == '1') // serial monitor send 1 to enable jtag
+      route_usb_jtag_to_gpio();
+  }
+  if(Serial1.available())
+    Serial.write(Serial1.read());
 }
