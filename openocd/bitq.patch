@@ -1,0 +1,18 @@
+diff --git a/src/jtag/drivers/bitq.c b/src/jtag/drivers/bitq.c
+index ef870e648..a88b86976 100644
+--- a/src/jtag/drivers/bitq.c
++++ b/src/jtag/drivers/bitq.c
+@@ -253,8 +253,12 @@ int bitq_execute_queue(struct jtag_command *cmd_queue)
+ 				bitq_in_proc();
+ 			break;
+ 
++		case JTAG_STABLECLOCKS:
++			LOG_DEBUG_IO("stableclocks");
++			break;
++
+ 		default:
+-			LOG_ERROR("BUG: unknown JTAG command type encountered");
++			LOG_ERROR("BUG: unknown JTAG command type %i encountered", cmd->type);
+ 			exit(-1);
+ 		}
+ 
