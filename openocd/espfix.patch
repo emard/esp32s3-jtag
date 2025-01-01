@@ -32,14 +32,11 @@ index 3ed182da4..bab790b68 100644
  	/* delayed read of requested TDO data,
  	 * the input shall be checked after call to any enqueuing function
 diff --git a/src/jtag/drivers/esp_usb_jtag.c b/src/jtag/drivers/esp_usb_jtag.c
-index 950405954..6722819cd 100644
+index 950405954..72283a013 100644
 --- a/src/jtag/drivers/esp_usb_jtag.c
 +++ b/src/jtag/drivers/esp_usb_jtag.c
-@@ -335,12 +335,15 @@ static int esp_usb_jtag_command_add_raw(unsigned int cmd)
- }
- 
+@@ -337,10 +337,12 @@ static int esp_usb_jtag_command_add_raw(unsigned int cmd)
  /* Writes a command stream equivalent to writing `cmd` `ct` times. */
-+#if 1
  static int esp_usb_jtag_write_rlestream(unsigned int cmd, int ct)
  {
 +	if(ct <= 0)
@@ -52,44 +49,22 @@ index 950405954..6722819cd 100644
  	int ret = esp_usb_jtag_command_add_raw(cmd);
  	if (ret != ERROR_OK)
  		return ret;
-@@ -353,6 +356,22 @@ static int esp_usb_jtag_write_rlestream(unsigned int cmd, int ct)
- 	}
- 	return ERROR_OK;
- }
-+#else
-+static int esp_usb_jtag_write_rlestream(unsigned int cmd, int ct)
-+{
-+	/* Special case: stacking flush commands does not make sense (and may not make the hardware very happy) */
-+	if (cmd == CMD_FLUSH)
-+		ct = 1;
-+	/* repeat commands */
-+	while (ct > 0) {
-+		esp_usb_jtag_command_add_raw(cmd);
-+		//if (ret != ERROR_OK)
-+		//	return ret;
-+		ct--;
-+	}
-+	return ERROR_OK;
-+}
-+#endif
- 
- /* Adds a command to the buffer of things to be sent. Transparently handles RLE compression using
-  * the CMD_REP_x commands */
-@@ -438,6 +457,13 @@ static int esp_usb_jtag_reset(int trst, int srst)
+@@ -438,6 +440,14 @@ static int esp_usb_jtag_reset(int trst, int srst)
  	return esp_usb_jtag_command_add(CMD_RST(srst));
  }
  
 +/* required for RUNTEST IDLE command */
 +void esp_usb_jtag_stableclocks(int num)
 +{
++    int tms = (tap_get_state() == TAP_RESET ? 1 : 0);
 +    LOG_DEBUG_IO("esp_usb_jtag: doing %i stableclocks. (TODO)", num);
-+    esp_usb_jtag_write_rlestream(CMD_CLK(0,0,0), num);
++    esp_usb_jtag_write_rlestream(CMD_CLK(0,0,tms), num);
 +}
 +
  /* Called by bitq to see if the IN data already is returned to the host. */
  static int esp_usb_jtag_in_rdy(void)
  {
-@@ -484,6 +510,7 @@ static int esp_usb_jtag_init(void)
+@@ -484,6 +494,7 @@ static int esp_usb_jtag_init(void)
  	bitq_interface->flush = esp_usb_jtag_flush;
  	bitq_interface->sleep = esp_usb_jtag_sleep;
  	bitq_interface->reset = esp_usb_jtag_reset;
