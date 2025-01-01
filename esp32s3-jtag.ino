@@ -37,6 +37,7 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32C3
+/* untested */
 #define OMATRIX_TCK   36
 #define OMATRIX_TMS   37
 #define OMATRIX_TDI   38
