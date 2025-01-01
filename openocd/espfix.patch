@@ -1,0 +1,99 @@
+diff --git a/src/jtag/drivers/bitq.c b/src/jtag/drivers/bitq.c
+index ef870e648..791d66ec4 100644
+--- a/src/jtag/drivers/bitq.c
++++ b/src/jtag/drivers/bitq.c
+@@ -253,8 +253,15 @@ int bitq_execute_queue(struct jtag_command *cmd_queue)
+ 				bitq_in_proc();
+ 			break;
+ 
++		case JTAG_STABLECLOCKS:
++			LOG_DEBUG_IO("stableclocks for runtest %i", cmd->cmd.runtest->num_cycles);
++			bitq_interface->stableclocks(cmd->cmd.runtest->num_cycles);
++			if (bitq_interface->in_rdy())
++				bitq_in_proc();
++			break;
++
+ 		default:
+-			LOG_ERROR("BUG: unknown JTAG command type encountered");
++			LOG_ERROR("BUG: unknown JTAG command type %i encountered", cmd->type);
+ 			exit(-1);
+ 		}
+ 
+diff --git a/src/jtag/drivers/bitq.h b/src/jtag/drivers/bitq.h
+index 3ed182da4..bab790b68 100644
+--- a/src/jtag/drivers/bitq.h
++++ b/src/jtag/drivers/bitq.h
+@@ -17,6 +17,7 @@ struct bitq_interface {
+ 
+ 	int (*sleep)(unsigned long us);
+ 	int (*reset)(int trst, int srst);
++	void (*stableclocks)(int num);
+ 
+ 	/* delayed read of requested TDO data,
+ 	 * the input shall be checked after call to any enqueuing function
+diff --git a/src/jtag/drivers/esp_usb_jtag.c b/src/jtag/drivers/esp_usb_jtag.c
+index 950405954..6722819cd 100644
+--- a/src/jtag/drivers/esp_usb_jtag.c
++++ b/src/jtag/drivers/esp_usb_jtag.c
+@@ -335,12 +335,15 @@ static int esp_usb_jtag_command_add_raw(unsigned int cmd)
+ }
+ 
+ /* Writes a command stream equivalent to writing `cmd` `ct` times. */
++#if 1
+ static int esp_usb_jtag_write_rlestream(unsigned int cmd, int ct)
+ {
++	if(ct <= 0)
++		return ERROR_OK;
+ 	/* Special case: stacking flush commands does not make sense (and may not make the hardware very happy) */
+ 	if (cmd == CMD_FLUSH)
+ 		ct = 1;
+-	/* Output previous command and repeat commands */
++	/* Output first command and repeat it afterwards */
+ 	int ret = esp_usb_jtag_command_add_raw(cmd);
+ 	if (ret != ERROR_OK)
+ 		return ret;
+@@ -353,6 +356,22 @@ static int esp_usb_jtag_write_rlestream(unsigned int cmd, int ct)
+ 	}
+ 	return ERROR_OK;
+ }
++#else
++static int esp_usb_jtag_write_rlestream(unsigned int cmd, int ct)
++{
++	/* Special case: stacking flush commands does not make sense (and may not make the hardware very happy) */
++	if (cmd == CMD_FLUSH)
++		ct = 1;
++	/* repeat commands */
++	while (ct > 0) {
++		esp_usb_jtag_command_add_raw(cmd);
++		//if (ret != ERROR_OK)
++		//	return ret;
++		ct--;
++	}
++	return ERROR_OK;
++}
++#endif
+ 
+ /* Adds a command to the buffer of things to be sent. Transparently handles RLE compression using
+  * the CMD_REP_x commands */
+@@ -438,6 +457,13 @@ static int esp_usb_jtag_reset(int trst, int srst)
+ 	return esp_usb_jtag_command_add(CMD_RST(srst));
+ }
+ 
++/* required for RUNTEST IDLE command */
++void esp_usb_jtag_stableclocks(int num)
++{
++    LOG_DEBUG_IO("esp_usb_jtag: doing %i stableclocks. (TODO)", num);
++    esp_usb_jtag_write_rlestream(CMD_CLK(0,0,0), num);
++}
++
+ /* Called by bitq to see if the IN data already is returned to the host. */
+ static int esp_usb_jtag_in_rdy(void)
+ {
+@@ -484,6 +510,7 @@ static int esp_usb_jtag_init(void)
+ 	bitq_interface->flush = esp_usb_jtag_flush;
+ 	bitq_interface->sleep = esp_usb_jtag_sleep;
+ 	bitq_interface->reset = esp_usb_jtag_reset;
++	bitq_interface->stableclocks = esp_usb_jtag_stableclocks;
+ 	bitq_interface->in_rdy = esp_usb_jtag_in_rdy;
+ 	bitq_interface->in = esp_usb_jtag_in;
+ 
