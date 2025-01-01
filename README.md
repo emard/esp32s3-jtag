@@ -2,7 +2,8 @@
 
 ESP32S3 and ESP32C3 have built-in hardware USB JTAG
 by default routed to JTAG of internal CPU. It is
-possible to route this USB JTAG to physical GPIO pins.
+possible to route this USB JTAG to physical GPIO pins
+from user firmware. No efuses need to be burned.
 
     XIAO ESP32S3 MINI
     Mouser P/N: 713-113991114    7$
