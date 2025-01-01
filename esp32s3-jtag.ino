@@ -28,6 +28,22 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define PIN_TDO  4
 #define PIN_SRST 5
 
+#if CONFIG_IDF_TARGET_ESP32S3
+#define OMATRIX_TCK   85
+#define OMATRIX_TMS   86
+#define OMATRIX_TDI   87
+#define OMATRIX_SRST 251
+#define IMATRIX_TDO  251
+#endif
+
+#if CONFIG_IDF_TARGET_ESP32C3
+#define OMATRIX_TCK   36
+#define OMATRIX_TMS   37
+#define OMATRIX_TDI   38
+#define OMATRIX_SRST 127
+#define IMATRIX_TDO   39
+#endif
+
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
 void route_usb_jtag_to_gpio()
 {
@@ -41,11 +57,11 @@ void route_usb_jtag_to_gpio()
     READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG)
   | USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
   // esp_rom_gpio_connect_out_signal(GPIO, IOMATRIX, false, false);
-  esp_rom_gpio_connect_out_signal(PIN_TCK,   85, false, false);
-  esp_rom_gpio_connect_out_signal(PIN_TMS,   86, false, false);
-  esp_rom_gpio_connect_out_signal(PIN_TDI,   87, false, false);
-  esp_rom_gpio_connect_out_signal(PIN_SRST, 251, false, false);
-  esp_rom_gpio_connect_in_signal (PIN_TDO,  251, false);
+  esp_rom_gpio_connect_out_signal(PIN_TCK,   OMATRIX_TCK,  false, false);
+  esp_rom_gpio_connect_out_signal(PIN_TMS,   OMATRIX_TMS,  false, false);
+  esp_rom_gpio_connect_out_signal(PIN_TDI,   OMATRIX_TDI,  false, false);
+  esp_rom_gpio_connect_out_signal(PIN_SRST,  OMATRIX_SRST, false, false);
+  esp_rom_gpio_connect_in_signal (PIN_TDO,   IMATRIX_TDO,  false);
 }
 
 void unroute_usb_jtag_to_gpio()
