@@ -54,6 +54,15 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define IMATRIX_TDO   19
 #endif
 
+#if CONFIG_IDF_TARGET_ESP32H2
+/* incomplete */
+#define OMATRIX_TCK
+#define OMATRIX_TMS
+#define OMATRIX_TDI
+#define OMATRIX_SRST  19
+#define IMATRIX_TDO   19
+#endif
+
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
 void route_usb_jtag_to_gpio()
 {
