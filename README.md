@@ -112,7 +112,10 @@ https://github.com/espressif/esp-usb-bridge
 
 # TODO
 
-Detect when usb-serial is connected or disconnected
-then enable or disable physical gpio jtag.
-Maybe use "SRST" signal which is normally not
-needed for FPGA to control HI-Z state of JTAG lines.
+    [ ] Detect when usb-serial is connected or disconnected
+        then enable or disable physical gpio jtag.
+    [ ] Maybe use "SRST" signal which is normally not
+        needed for FPGA to control HI-Z state of JTAG lines.
+    [ ] micropython version
+        https://docs.micropython.org/en/latest/esp32/tutorial/peripheral_access.html
+  
