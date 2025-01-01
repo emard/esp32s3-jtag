@@ -103,6 +103,9 @@ It's in officual OpenOCD, driver and protocol description is here
 https://github.com/openocd-org/openocd/blob/master/src/jtag/drivers/esp_usb_jtag.c
 
 Here is the ESP32S2 or ESP32S3 usb jtag bridge project
+which has firmware implementation of its JTAG protocol
+available in hardware too. Hopfully this source can give
+answers to undocumented details of the protocol.
 
 https://github.com/espressif/esp-usb-bridge
 
