@@ -63,6 +63,8 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define IMATRIX_TDO   19
 #endif
 
+bool usb_was_connected = false;
+
 /* arguments are GPIO pin numbers like (1,2,3,4,5) */
 void route_usb_jtag_to_gpio()
 {
@@ -100,26 +102,19 @@ void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LED_OFF);
-  // usb-serial
   Serial.begin(); // usb-serial
   Serial1.begin(BAUD, SERIAL_8N1, RXD, TXD); // hardware serial
-  route_usb_jtag_to_gpio();
-  // unroute_usb_jtag_to_gpio();
 }
 
 void loop() {
-  uint8_t usb_rx;
-  // digitalWrite(LED_BUILTIN, (((micros()>>16) & 15)==0)^LED_OFF ); // blink
-  // digitalWrite(LED_BUILTIN, digitalRead(0)^LED_OFF); // test input pin
   if(Serial.available())
-  {
-    usb_rx = Serial.read();
-    Serial1.write(usb_rx);
-    if(usb_rx == '0') // serial monitor send 0 to disable jtag
-      unroute_usb_jtag_to_gpio();
-    if(usb_rx == '1') // serial monitor send 1 to enable jtag
-      route_usb_jtag_to_gpio();
-  }
+    Serial1.write(Serial.read());
   if(Serial1.available())
     Serial.write(Serial1.read());
+  bool usb_is_connected = usb_serial_jtag_is_connected();
+  if(usb_was_connected == false && usb_is_connected == true)
+    route_usb_jtag_to_gpio();
+  if(usb_was_connected == true && usb_is_connected == false)
+    unroute_usb_jtag_to_gpio();
+  usb_was_connected = usb_is_connected;
 }
