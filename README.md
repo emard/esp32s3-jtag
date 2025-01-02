@@ -98,17 +98,9 @@ On linux udev rules are needed (users should be members of "dialout" group):
     ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
     GROUP="dialout", MODE="666"
 
-By default JTAG is enabled.
-Using arduino serial monitor or any other serial terminal
-we can enable or disable jtag by typing "1" or "0" on keyboard:
-
-    0 disable JTAG and turn LED OFF
-    1 enable  JTAG and turn LED ON
-
-If external jtag is connected, here is one of many possible
-ways how to check that jtag is enabled or disabled:
-
-    openFPGALoader --board ulx3s --detect
+ESP JTAG is enabled only when usb is plugged to PC.
+When usb is unplugged ESP releases JTAG to HI-Z state
+which allows JTAG free to be used by other devices.
 
 # Protocol and source reference
 
@@ -130,10 +122,8 @@ https://github.com/espressif/esp-usb-bridge
 
 # TODO
 
-    [ ] Detect when usb-serial is connected or disconnected
+    [x] Detect when usb-serial is connected or disconnected
         then enable or disable physical gpio jtag.
-    [ ] Maybe use "SRST" signal which is normally not
-        needed for FPGA to control HI-Z state of JTAG lines.
     [ ] micropython version
         https://docs.micropython.org/en/latest/esp32/tutorial/peripheral_access.html
   
