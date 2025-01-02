@@ -67,7 +67,7 @@ and select adequate board with "ESP32S3".
 
 This openocd configuration file is important:
 
-    # espusbjtag.ocd
+    # esp_usb_jtag.ocd
     adapter driver esp_usb_jtag
     espusbjtag vid_pid 0x303a 0x1001
     espusbjtag caps_descriptor 0x2000
@@ -83,6 +83,10 @@ Example typical usage, openocd file to write bitstream.svf to ECP5 FPGA
     scan_chain
     svf -tap lfe5.tap -quiet -progress bitstream.svf
     shutdown
+
+use them together
+
+    openocd-espusbjtag -f esp_usb_jtag.ocd -f ecp5_25f.ocd
 
 On linux udev rules are needed (users should be members of "dialout" group):
 
