@@ -98,8 +98,8 @@ On linux udev rules are needed (users should be members of "dialout" group):
     ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
     GROUP="dialout", MODE="666"
 
-ESP JTAG is enabled only when usb is plugged to PC.
-When usb is unplugged ESP releases JTAG to HI-Z state
+ESP JTAG is enabled only when ESP USB is plugged to PC.
+When ESP USB is unplugged, ESP releases JTAG to HI-Z state
 which allows JTAG free to be used by other devices.
 
 # Protocol and source reference
