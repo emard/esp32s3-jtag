@@ -65,12 +65,24 @@ To compile esp32s3 firmware install arduino
 then install board support "esp32 by espressif"
 and select adequate board with "ESP32S3".
 
-This openocd configuration file is important
+This openocd configuration file is important:
 
+    # espusbjtag.ocd
     adapter driver esp_usb_jtag
     espusbjtag vid_pid 0x303a 0x1001
     espusbjtag caps_descriptor 0x2000
     adapter speed 40000
+
+Example typical usage, openocd file to write bitstream.svf to ECP5 FPGA
+
+    # ecp5_25f.ocd
+    # telnet_port 4444
+    # gdb port 3333
+    jtag newtap lfe5 tap -expected-id 0x41111043 -irlen 8 -irmask 0xFF -ircapture 0x5
+    init
+    scan_chain
+    svf -tap lfe5.tap -quiet -progress bitstream.svf
+    shutdown
 
 On linux udev rules are needed (users should be members of "dialout" group):
 
