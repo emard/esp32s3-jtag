@@ -63,7 +63,7 @@ and compile
 
 To compile esp32s3 firmware install arduino
 then install board support "esp32 by espressif"
-and select adequate board with "ESP32S3".
+and select board with esp32s3 like "XIAO_ESP32S3".
 
 This openocd configuration file is important:
 
