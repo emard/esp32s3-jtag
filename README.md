@@ -96,7 +96,7 @@ ways how to check that jtag is enabled or disabled:
 
 # Protocol and source reference
 
-The patched OpenOCD is here
+espressif's edition of OpenOCD is here
 
 https://github.com/espressif/openocd-esp32
 
