@@ -5,7 +5,7 @@ routed to JTAG of internal CPU. It is possible to
 route this USB JTAG to physical GPIO pins
 from user firmware. No efuses need to be burned.
 Speed is about 2 Mbit/s. Supported by openFPGALoader
-(branch:esp_usb_jtag) and openocd (needs patch).
+(branch: esp_usb_jtag) and openocd (needs patch).
 
     XIAO ESP32S3 MINI
     Mouser P/N: 713-113991114    7$
@@ -23,10 +23,72 @@ Speed is about 2 Mbit/s. Supported by openFPGALoader
                 └─────────────┘
                     top view  
 
+Here is short arduino code to initialize such JTAG and
 
-Here is short arduino code to initialize such JTAG.
+# Binary firmware for ESP32S3
 
-Currently openocd doesn't work good enough for programming
+For quickstart just upload binary version. One firmware should be good for most
+ESP32S3 boards not only XIAO just connect board's GPIO1-5 pins to target JTAG
+as on above drawing.
+
+To program binary firmware we use "esptool.py":
+
+    pipx install esptool
+    cd binary
+    ./flash.sh esp32s3-jtag.ino.merged.bin
+
+"flash.sh" actually does
+
+    esptool.py --port /dev/ttyACM0 erase_flash
+    esptool.py --port /dev/ttyACM0 write_flash -z 0 esp32s3-jtag.ino.merged.bin
+
+ESP JTAG is enabled only when ESP USB is plugged to PC.
+When ESP USB is unplugged, ESP releases JTAG to HI-Z state
+which allows JTAG free to be used by other devices.
+
+# Linux
+
+For convenience here is udev rule to allow non-root users members of
+"dialout" group to acces JTAG.
+
+    # this is for libusb usb-jtag access
+    ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
+    GROUP="dialout", MODE="666"
+
+# openFPGALoader
+
+To compile currently we should use "esp_usb_jtag" branch.
+
+    git clone https://github.com/trabucayre/openFPGALoader
+    cd openFPGALoader
+    git checkout esp_usb_jtag
+    mkdir build
+    cd build
+    cmake ..
+    make
+
+Currently it is tested on Lattice ECP5 FPGA.
+Other target chips may have issues.
+openFPGALoader works on fixing small bugs.
+
+    ./openFPGALoader -c esp32s3 ulx3s_25f_oscg_blink.bit
+    empty
+     0x1 0xa 0x1 0x8 0x40 0x1f 0x1 0x0 0xff 0x0
+    esp_usb_jtag: Device found. Base speed 40000 KHz, div range 1 to 255
+    Jtag frequency : requested 6000000Hz -> real 6000000Hz divisor=6
+    Open file: DONE
+    b3bdffff
+    Parse file: DONE
+    Enable configuration: DONE
+    SRAM erase: DONE
+    Loading: [==================================================] 100.00%
+    Done
+    Disable configuration: DONE
+    drain_in
+
+# openocd
+
+Currently "stock" openocd doesn't work good enough for programming
 FPGA with esp32s3 because it doesn't support "RUNTEST" command
 which is used to drive clock without any other data being sent.
 for example
@@ -88,20 +150,6 @@ Example typical usage, openocd file to write bitstream.svf to ECP5 FPGA
 use them together
 
     openocd-espusbjtag -f esp_usb_jtag.ocd -f ecp5_25f.ocd
-
-On linux udev rules are needed (users should be members of "dialout" group):
-
-    # file: /etc/udev/rules.d/50-esp32s3.rules
-    # this is for usbserial device
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
-    MODE="664", GROUP="dialout"
-    # this is for libusb usb-jtag access
-    ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", \
-    GROUP="dialout", MODE="666"
-
-ESP JTAG is enabled only when ESP USB is plugged to PC.
-When ESP USB is unplugged, ESP releases JTAG to HI-Z state
-which allows JTAG free to be used by other devices.
 
 # Protocol and source reference
 
