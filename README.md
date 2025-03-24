@@ -28,7 +28,7 @@ Here is short arduino code to initialize such JTAG and
 # Binary firmware for ESP32S3
 
 For quickstart just upload binary version. One firmware should be good for most
-ESP32S3 boards not only XIAO just connect board's GPIO1-5 pins to target JTAG
+ESP32S3 boards not only XIAO. Just connect board's GPIO1-5 pins to target JTAG
 as on above drawing.
 
 To program binary firmware we use "esptool.py":
