@@ -7,7 +7,8 @@ Tools->JTAG Adapter: Integrated USB JTAG
 Tools->USB Mode: Hardware CDC and JTAG
 */
 
-#include "soc/usb_serial_jtag_reg.h" // JTAG
+#include "soc/usb_serial_jtag_reg.h" // JTAG WRITE_PERI_REG
+#include "soc/gpio_sig_map.h" // JTAG gpio_connect_out
 
 /*
 references
@@ -28,40 +29,24 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define PIN_TDO  4
 #define PIN_SRST 5
 
+/*
 #if CONFIG_IDF_TARGET_ESP32S3
-#define OMATRIX_TCK   85
-#define OMATRIX_TMS   86
-#define OMATRIX_TDI   87
-#define OMATRIX_SRST 251
-#define IMATRIX_TDO  251
+#define USB_JTAG_TCK_IDX        85
+#define USB_JTAG_TMS_IDX        86
+#define USB_JTAG_TDI_IDX        87
+#define USB_JTAG_TRST_IDX       251
+#define USB_JTAG_TDO_BRIDGE_IDX 251
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32C3
-/* untested */
-#define OMATRIX_TCK   36
-#define OMATRIX_TMS   37
-#define OMATRIX_TDI   38
-#define OMATRIX_SRST 127
-#define IMATRIX_TDO   39
+// untested
+#define USB_JTAG_TCK_IDX        36
+#define USB_JTAG_TMS_IDX        37
+#define USB_JTAG_TDI_IDX        38
+#define USB_JTAG_TRST_IDX       127
+#define USB_JTAG_TDO_BRIDGE_IDX 39
 #endif
-
-#if CONFIG_IDF_TARGET_ESP32C6
-/* incomplete */
-#define OMATRIX_TCK
-#define OMATRIX_TMS
-#define OMATRIX_TDI
-#define OMATRIX_SRST  19
-#define IMATRIX_TDO   19
-#endif
-
-#if CONFIG_IDF_TARGET_ESP32H2
-/* incomplete */
-#define OMATRIX_TCK
-#define OMATRIX_TMS
-#define OMATRIX_TDI
-#define OMATRIX_SRST  19
-#define IMATRIX_TDO   19
-#endif
+*/
 
 bool usb_was_connected = false;
 
@@ -78,11 +63,11 @@ void route_usb_jtag_to_gpio()
     READ_PERI_REG(USB_SERIAL_JTAG_CONF0_REG)
   | USB_SERIAL_JTAG_USB_JTAG_BRIDGE_EN);
   // esp_rom_gpio_connect_out_signal(GPIO, IOMATRIX, false, false);
-  esp_rom_gpio_connect_out_signal(PIN_TCK,   OMATRIX_TCK,  false, false);
-  esp_rom_gpio_connect_out_signal(PIN_TMS,   OMATRIX_TMS,  false, false);
-  esp_rom_gpio_connect_out_signal(PIN_TDI,   OMATRIX_TDI,  false, false);
-  esp_rom_gpio_connect_out_signal(PIN_SRST,  OMATRIX_SRST, false, false);
-  esp_rom_gpio_connect_in_signal (PIN_TDO,   IMATRIX_TDO,  false);
+  esp_rom_gpio_connect_out_signal(PIN_TCK,   USB_JTAG_TCK_IDX,  false, false);
+  esp_rom_gpio_connect_out_signal(PIN_TMS,   USB_JTAG_TMS_IDX,  false, false);
+  esp_rom_gpio_connect_out_signal(PIN_TDI,   USB_JTAG_TDI_IDX,  false, false);
+  esp_rom_gpio_connect_out_signal(PIN_SRST,  USB_JTAG_TRST_IDX, false, false);
+  esp_rom_gpio_connect_in_signal (PIN_TDO,   USB_JTAG_TDO_BRIDGE_IDX,  false);
 }
 
 void unroute_usb_jtag_to_gpio()
