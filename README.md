@@ -1,10 +1,11 @@
 # ESP32S3 USB JTAG
 
-ESP32S3 and ESP32C3 have built-in hardware USB JTAG
-by default routed to JTAG of internal CPU. It is
-possible to route this USB JTAG to physical GPIO pins
+ESP32S3 has built-in hardware USB JTAG by default
+routed to JTAG of internal CPU. It is possible to
+route this USB JTAG to physical GPIO pins
 from user firmware. No efuses need to be burned.
-Speed is about 2 Mbit/s.
+Speed is about 2 Mbit/s. Supported by openFPGALoader
+(branch:esp_usb_jtag) and openocd (needs patch).
 
     XIAO ESP32S3 MINI
     Mouser P/N: 713-113991114    7$
@@ -122,8 +123,6 @@ https://github.com/espressif/esp-usb-bridge
 
 # TODO
 
-    [x] Detect when usb-serial is connected or disconnected
-        then enable or disable physical gpio jtag.
     [ ] micropython version
         https://docs.micropython.org/en/latest/esp32/tutorial/peripheral_access.html
-  
+    [ ] ESP32C3, C6, H2, ...
