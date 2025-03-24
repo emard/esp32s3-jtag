@@ -19,7 +19,7 @@ Speed is about 2 Mbit/s. Supported by openFPGALoader
             TDO │4           9│
            SRST │5           8│
                 │6           7│
-                │43 TX   RX 44│
+             TX │43         44│ RX
                 └─────────────┘
                     top view  
 
@@ -54,7 +54,7 @@ Will generate "BUG" in all current known openocd's.
     95%    Error: BUG: unknown JTAG command type encountered
 
 To fix this BUG, use [openocd fork](https://github.com/emard/openocd)
-patched to work with esp32s3-jtag or or apply
+patched to work with esp32s3-jtag or apply
 [espfix.patch](openocd/espfix.patch) to mainstream openocd
 and compile
 
