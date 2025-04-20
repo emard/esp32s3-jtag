@@ -5,7 +5,7 @@ routed to JTAG of internal CPU. It is possible to
 route this USB JTAG to physical GPIO pins
 from user firmware. No efuses need to be burned.
 Speed is about 2 Mbit/s. Supported by openFPGALoader
-(branch: esp_usb_jtag) and openocd (needs patch).
+and openocd (needs patch).
 
     XIAO ESP32S3 MINI
     Mouser P/N: 713-113991114    7$
