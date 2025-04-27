@@ -29,6 +29,14 @@ https://eloquentarduino.com/posts/esp32-cam-quickstart
 #define PIN_TDO  4
 #define PIN_SRST 5
 
+/* ULX3S v3.1.7 S3 prototype
+#define PIN_TCK  39
+#define PIN_TMS  38
+#define PIN_TDI  1
+#define PIN_TDO  6
+#define PIN_SRST 41
+*/
+
 /*
 #if CONFIG_IDF_TARGET_ESP32S3
 #define USB_JTAG_TCK_IDX        85
